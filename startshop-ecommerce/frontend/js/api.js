@@ -18,21 +18,30 @@ async function apiFetch(path, options = {}) {
     headers["Authorization"] = "Bearer " + token;
   }
 
-  const response = await fetch(API_BASE + path, {
-    ...options,
-    headers,
-  });
+  try {
+    const response = await fetch(API_BASE + path, {
+      ...options,
+      headers,
+    });
 
-  // 204 No Content: no hay body que parsear
-  if (response.status === 204) {
-    return null;
-  }
+    // 204 No Content: no hay body que parsear
+    if (response.status === 204) {
+      return null;
+    }
 
-  const data = await response.json().catch(() => null);
+    const data = await response.json().catch(() => null);
 
-  if (!response.ok) {
-    const mensaje = (data && data.message) || "Ocurrio un error inesperado";
-    throw new Error(mensaje);
+    if (!response.ok) {
+      const mensaje = (data && data.message) || "Ocurrio un error inesperado";
+      throw new Error(mensaje);
+    }
+
+    return data;
+  } catch (err) {
+    if (err instanceof Error && err.message) {
+      throw err;
+    }
+    throw new Error("No se pudo conectar con la API. Verifica que el backend esté disponible.");
   }
 
   return data;
