@@ -1,0 +1,28 @@
+version: '3.9'
+
+# Este docker-compose es OPCIONAL. Para desarrollar y aprender puedes:
+#   - Correr el backend con: cd backend && mvn spring-boot:run
+#   - Abrir el frontend directamente con doble clic en frontend/index.html
+#
+# Cuando quieras probar el proyecto "empaquetado" como se veria en un servidor real,
+# usa: docker compose up --build
+
+services:
+  api:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - api-data:/app/data   # Aqui vive el archivo de la base de datos H2
+
+  web:
+    image: nginx:alpine
+    depends_on:
+      - api
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    ports:
+      - "3000:80"
+
+volumes:
+  api-data:

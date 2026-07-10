@@ -1,0 +1,13 @@
+# Backend (Maven / Java)
+backend/target/
+backend/data/
+*.class
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
